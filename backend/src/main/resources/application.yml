@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: silentshield-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/silentshield}
+    username: ${DB_USER:silentshield}
+    password: ${DB_PASSWORD:silentshield}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+silentshield:
+  jwt:
+    # DEV ONLY default. Must be >= 32 bytes. Override with JWT_SECRET outside local dev.
+    secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-0123456789}
+    ttl-minutes: 15
+  lockout:
+    max-failed-attempts: 5
+    lockout-minutes: 15
