@@ -11,6 +11,7 @@ No real customer data of any kind is used or referenced.
 from __future__ import annotations
 
 import argparse
+import os
 import random
 import uuid
 from dataclasses import dataclass, field
@@ -187,6 +188,9 @@ def main() -> None:
 
     events = generate_events(args.customers, args.days, args.anomaly_rate, args.seed)
     df = events_to_dataframe(events)
+    out_dir = os.path.dirname(args.out)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     df.to_parquet(args.out, index=False)
     print(f"Wrote {len(df)} simulated events to {args.out}")
 

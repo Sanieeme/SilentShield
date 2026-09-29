@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 
 import pandas as pd
 
@@ -45,6 +46,9 @@ def run(events_path: str, features_out: str | None = None) -> pd.DataFrame:
     features = build_feature_table(frames["atm"], frames["transaction"], frames["auth"], baselines)
 
     if features_out:
+        out_dir = os.path.dirname(features_out)
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
         features.to_parquet(features_out, index=False)
         logger.info("wrote %d feature rows -> %s", len(features), features_out)
 

@@ -56,7 +56,11 @@ def build_feature_row(customer_id: str, activity: pd.DataFrame, auth: pd.DataFra
         # mixed-schema raw events file where other streams left it all-NaN).
         # `~` on an object-dtype column of Python bools does a bitwise
         # complement (~True == -2), not a logical NOT - always coerce first.
-        success = auth["success"].fillna(False).astype(bool)
+        # Convert element-wise rather than via fillna/infer_objects, whose
+        # "correct" incantation keeps changing across pandas versions
+        # (2.x warns without infer_objects, 3.x warns about infer_objects
+        # itself) - bool() per element is stable across all of them.
+        success = auth["success"].apply(lambda v: bool(v) if pd.notna(v) else False)
         failed_auth = int((~success).sum())
     else:
         failed_auth = 0
