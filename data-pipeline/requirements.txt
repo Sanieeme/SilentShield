@@ -1,0 +1,7 @@
+pydantic>=2.7,<3
+pandas>=2.2,<3
+pyarrow>=16.0
+kafka-python>=2.0,<3
+psycopg2-binary>=2.9,<3
+python-dateutil>=2.9
+pytest>=8.0
